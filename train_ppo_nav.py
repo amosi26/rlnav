@@ -43,7 +43,7 @@ def train(total_timesteps=5000, run_name="debug_run", save_freq=1000):
         tensorboard_log=str(TENSORBOARD_DIR),
         n_steps=512,
         batch_size=256,
-        learning_rate=2e-4,
+        learning_rate=1.5e-4,
         gamma=0.995,
         gae_lambda=0.97,
         clip_range=0.2,
