@@ -1,15 +1,26 @@
 import math
 import time
+from typing import Any
 
 import gymnasium as gym
 import numpy as np
 import pygame
 from gymnasium import register, spaces
 
+ENV_ID = "NavigationEnv-v0"
+WINDOW_SIZE = 600
+ROBOT_SIZE = 20
+GOAL_SIZE = 20
+ROBOT_SPEED = 3
+PADDING = 20
+SUCCESS_DISTANCE = 10
+MIN_GOAL_DISTANCE = 100
+MAX_EPISODE_STEPS = 400
+
 register(
-    id="NavigationEnv-v0",
+    id=ENV_ID,
     entry_point="gym_env:NavigationEnv",
-    max_episode_steps=400,
+    max_episode_steps=MAX_EPISODE_STEPS,
 )
 
 
@@ -19,18 +30,18 @@ class NavigationEnv(gym.Env):
     def __init__(self):
         super().__init__()
 
-        self.width = 600
-        self.height = 600
+        self.width = WINDOW_SIZE
+        self.height = WINDOW_SIZE
 
         self.robot_x = 100
         self.robot_y = 100
-        self.robot_speed = 3
+        self.robot_speed = ROBOT_SPEED
 
         self.goal_x = 400
         self.goal_y = 400
 
-        self.robot_size = 20
-        self.goal_size = 20
+        self.robot_size = ROBOT_SIZE
+        self.goal_size = GOAL_SIZE
 
         self.window = None
         self.clock = None
@@ -47,7 +58,13 @@ class NavigationEnv(gym.Env):
             dtype=np.float32,
         )
 
-    def _distance_to_goal(self):
+    def _get_observation(self) -> np.ndarray:
+        return np.array(
+            [self.robot_x, self.robot_y, self.goal_x, self.goal_y],
+            dtype=np.float32,
+        )
+
+    def _distance_to_goal(self) -> float:
         robot_cx = self.robot_x + self.robot_size / 2
         robot_cy = self.robot_y + self.robot_size / 2
         goal_cx = self.goal_x + self.goal_size / 2
@@ -55,30 +72,36 @@ class NavigationEnv(gym.Env):
 
         return math.sqrt((goal_cx - robot_cx) ** 2 + (goal_cy - robot_cy) ** 2)
 
-    def reset(self, seed=None, options=None):
+    def reset(self, seed: int | None = None, options: dict[str, Any] | None = None):
         super().reset(seed=seed)
 
-        self.robot_x = self.np_random.integers(20, self.width - self.robot_size - 20 + 1)
-        self.robot_y = self.np_random.integers(20, self.height - self.robot_size - 20 + 1)
+        self.robot_x = self.np_random.integers(
+            PADDING,
+            self.width - self.robot_size - PADDING + 1,
+        )
+        self.robot_y = self.np_random.integers(
+            PADDING,
+            self.height - self.robot_size - PADDING + 1,
+        )
 
         while True:
-            self.goal_x = self.np_random.integers(20, self.width - self.goal_size - 20 + 1)
-            self.goal_y = self.np_random.integers(20, self.height - self.goal_size - 20 + 1)
+            self.goal_x = self.np_random.integers(
+                PADDING,
+                self.width - self.goal_size - PADDING + 1,
+            )
+            self.goal_y = self.np_random.integers(
+                PADDING,
+                self.height - self.goal_size - PADDING + 1,
+            )
 
-            if self._distance_to_goal() > 100:
+            if self._distance_to_goal() > MIN_GOAL_DISTANCE:
                 break
 
         self.steps = 0
         self.start_time = time.time()
         self.prev_action = None
 
-        observation = np.array(
-            [self.robot_x, self.robot_y, self.goal_x, self.goal_y],
-            dtype=np.float32,
-        )
-
-        info = {}
-        return observation, info
+        return self._get_observation(), {}
 
     def step(self, action):
         self.steps += 1
@@ -107,7 +130,7 @@ class NavigationEnv(gym.Env):
         # Extra bonus when close so it keeps pushing inward
         proximity_bonus = max(0.0, (60.0 - new_distance) * 0.15)
 
-        if new_distance < 10:
+        if new_distance < SUCCESS_DISTANCE:
             reward = 1000
             terminated = True
         else:
@@ -137,18 +160,11 @@ class NavigationEnv(gym.Env):
             if percent_improvement < 0.05:
                 reward -= 4
 
-        truncated = self.steps >= 400
-
-        observation = np.array(
-            [self.robot_x, self.robot_y, self.goal_x, self.goal_y],
-            dtype=np.float32,
-        )
-
-        info = {}
+        truncated = self.steps >= MAX_EPISODE_STEPS
 
         self.prev_action = action
 
-        return observation, reward, terminated, truncated, info
+        return self._get_observation(), reward, terminated, truncated, {}
 
     def render(self):
         if self.window is None:

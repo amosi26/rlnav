@@ -1,18 +1,25 @@
 import gymnasium as gym
 import gym_env  # registers NavigationEnv-v0
 
-env = gym.make("NavigationEnv-v0")
 
-print("made env")
+def main():
+    env = gym.make(gym_env.ENV_ID)
+    obs, info = env.reset()
+    print("reset:", obs, info)
 
-obs, info = env.reset()
-print("reset ok:", obs, info)
+    for step in range(5):
+        action = env.action_space.sample()
+        obs, reward, terminated, truncated, info = env.step(action)
+        print(
+            f"step={step} action={action} reward={reward:.2f} "
+            f"terminated={terminated} truncated={truncated} obs={obs}"
+        )
 
-for i in range(5):
-    action = env.action_space.sample()
-    print(f"step {i}, action={action}")
-    obs, reward, terminated, truncated, info = env.step(action)
-    print("returned:", obs, reward, terminated, truncated, info)
+        if terminated or truncated:
+            break
 
-env.close()
-print("done")
+    env.close()
+
+
+if __name__ == "__main__":
+    main()

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from pathlib import Path
 import time
 
 import gymnasium as gym
@@ -10,30 +11,33 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.monitor import Monitor
 
+CHECKPOINT_DIR = Path("checkpoints")
+MODEL_DIR = Path("models")
+TENSORBOARD_DIR = Path("runs")
+
 
 def make_env():
-    env = gym.make("NavigationEnv-v0")
-    env = Monitor(env)
-    return env
+    return Monitor(gym.make(gym_env.ENV_ID))
 
 
 def train(total_timesteps=5000, run_name="debug_run", save_freq=1000):
-    print("before make_env")
+    CHECKPOINT_DIR.mkdir(exist_ok=True)
+    MODEL_DIR.mkdir(exist_ok=True)
+    TENSORBOARD_DIR.mkdir(exist_ok=True)
+
     env = make_env()
-    print("after make_env")
 
     checkpoint_callback = CheckpointCallback(
         save_freq=save_freq,
-        save_path="checkpoints",
+        save_path=str(CHECKPOINT_DIR),
         name_prefix=run_name,
     )
 
-    print("before model")
     model = PPO(
         "MlpPolicy",
         env,
         verbose=1,
-        tensorboard_log="runs",
+        tensorboard_log=str(TENSORBOARD_DIR),
         n_steps=128,
         batch_size=64,
         learning_rate=3e-4,
@@ -42,26 +46,24 @@ def train(total_timesteps=5000, run_name="debug_run", save_freq=1000):
         clip_range=0.2,
         device="cpu",
     )
-    print("after model")
 
-    print("before learn")
     model.learn(
         total_timesteps=total_timesteps,
         callback=checkpoint_callback,
         tb_log_name=run_name,
         progress_bar=True,
     )
-    print("after learn")
 
-    model.save(f"models/{run_name}_final")
+    final_model_path = MODEL_DIR / f"{run_name}_final"
+    model.save(str(final_model_path))
     env.close()
 
-    return f"models/{run_name}_final.zip"
+    return f"{final_model_path}.zip"
 
 
 def run_inference(checkpoint_path, episodes=3, delay=0.03):
     model = PPO.load(checkpoint_path)
-    env = gym.make("NavigationEnv-v0")
+    env = gym.make(gym_env.ENV_ID)
 
     for ep in range(episodes):
         obs, info = env.reset()
@@ -78,15 +80,15 @@ def run_inference(checkpoint_path, episodes=3, delay=0.03):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Train or run the navigation PPO agent.")
     subparsers = parser.add_subparsers(dest="mode", required=True)
 
-    train_parser = subparsers.add_parser("train")
+    train_parser = subparsers.add_parser("train", help="Train a PPO agent.")
     train_parser.add_argument("--timesteps", type=int, default=5000)
     train_parser.add_argument("--run-name", type=str, default="debug_run")
     train_parser.add_argument("--save-freq", type=int, default=1000)
 
-    infer_parser = subparsers.add_parser("infer")
+    infer_parser = subparsers.add_parser("infer", help="Run a trained agent.")
     infer_parser.add_argument("--checkpoint", type=str, required=True)
 
     args = parser.parse_args()
@@ -97,10 +99,10 @@ def main():
             run_name=args.run_name,
             save_freq=args.save_freq,
         )
-        print("running trained agent")
+        print(f"Saved model to {final_model}")
         run_inference(final_model)
 
-    elif args.mode == "infer":
+    else:
         run_inference(args.checkpoint)
 
 
