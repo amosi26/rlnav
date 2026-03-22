@@ -36,3 +36,5 @@ Smoke test the environment:
 ```bash
 python debug_env.py
 ```
+
+Goal: use RL to create an agent that gets from point a to point b utilizing PPO and later adapt into ros2 and gazebo to control a robot
