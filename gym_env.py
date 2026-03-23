@@ -7,32 +7,11 @@ import numpy as np
 import pygame
 from gymnasium import register, spaces
 
-ENV_ID = "NavigationEnv-v0"
-WINDOW_SIZE = 600
-ROBOT_SIZE = 20
-GOAL_SIZE = 20
-ROBOT_SPEED = 3
-PADDING = 20
-SUCCESS_DISTANCE = 10
-MIN_GOAL_DISTANCE = 100
-MAX_EPISODE_STEPS = 150
-MAX_DISTANCE = math.sqrt(2 * (WINDOW_SIZE ** 2))
-STEP_PENALTY = 0.05
-PROGRESS_SCALE = 3.0
-SUCCESS_REWARD = 100.0
-WALL_PENALTY = 1.5
-TURN_PENALTY = 0.4
-OSCILLATION_PENALTY = 0.75
-NO_PROGRESS_PENALTY = 0.25
-PROGRESS_EPSILON = 0.5
-NO_PROGRESS_LIMIT = 18
-STUCK_LIMIT = 4
-FLIP_LIMIT = 6
 
 register(
-    id=ENV_ID,
+    id="NavigationEnv-v0",
     entry_point="gym_env:NavigationEnv",
-    max_episode_steps=MAX_EPISODE_STEPS,
+    max_episode_steps=30,
 )
 
 
@@ -42,18 +21,36 @@ class NavigationEnv(gym.Env):
     def __init__(self):
         super().__init__()
 
-        self.width = WINDOW_SIZE
-        self.height = WINDOW_SIZE
+        self.env_id = "NavigationEnv-v0"
+        self.window_size = 600
+        self.robot_size = 20
+        self.goal_size = 20
+        self.robot_speed = 3
+        self.padding = 20
+        self.success_distance = 10
+        self.min_goal_distance = 100
+        self.max_episode_steps = 30
+        self.max_distance = math.sqrt(2 * (self.window_size ** 2))
+        self.step_penalty = 0.05
+        self.progress_scale = 3.0
+        self.success_reward = 100.0
+        self.wall_penalty = 1.5
+        self.turn_penalty = 0.4
+        self.oscillation_penalty = 0.75
+        self.no_progress_penalty = 0.25
+        self.progress_epsilon = 0.5
+        self.no_progress_limit = 18
+        self.stuck_limit = 4
+        self.flip_limit = 6
+
+        self.width = self.window_size
+        self.height = self.window_size
 
         self.robot_x = 100
         self.robot_y = 100
-        self.robot_speed = ROBOT_SPEED
 
         self.goal_x = 400
         self.goal_y = 400
-
-        self.robot_size = ROBOT_SIZE
-        self.goal_size = GOAL_SIZE
 
         self.window = None
         self.clock = None
@@ -83,7 +80,7 @@ class NavigationEnv(gym.Env):
         dy = goal_cy - robot_cy
         distance = math.sqrt((dx ** 2) + (dy ** 2))
         heading = math.atan2(dy, dx) / math.pi
-        return distance / MAX_DISTANCE, heading
+        return distance / self.max_distance, heading
 
     def _get_observation(self) -> np.ndarray:
         distance_norm, heading = self._goal_features()
@@ -104,25 +101,25 @@ class NavigationEnv(gym.Env):
         super().reset(seed=seed)
 
         self.robot_x = self.np_random.integers(
-            PADDING,
-            self.width - self.robot_size - PADDING + 1,
+            self.padding,
+            self.width - self.robot_size - self.padding + 1,
         )
         self.robot_y = self.np_random.integers(
-            PADDING,
-            self.height - self.robot_size - PADDING + 1,
+            self.padding,
+            self.height - self.robot_size - self.padding + 1,
         )
 
         while True:
             self.goal_x = self.np_random.integers(
-                PADDING,
-                self.width - self.goal_size - PADDING + 1,
+                self.padding,
+                self.width - self.goal_size - self.padding + 1,
             )
             self.goal_y = self.np_random.integers(
-                PADDING,
-                self.height - self.goal_size - PADDING + 1,
+                self.padding,
+                self.height - self.goal_size - self.padding + 1,
             )
 
-            if self._distance_to_goal() > MIN_GOAL_DISTANCE:
+            if self._distance_to_goal() > self.min_goal_distance:
                 break
 
         self.steps = 0
@@ -170,53 +167,53 @@ class NavigationEnv(gym.Env):
         wall_hit = not moved
         new_distance = self._distance_to_goal()
         progress_delta = old_distance - new_distance
-        reward = (PROGRESS_SCALE * progress_delta) - STEP_PENALTY
+        reward = (self.progress_scale * progress_delta) - self.step_penalty
 
-        if new_distance < SUCCESS_DISTANCE:
-            reward += SUCCESS_REWARD
+        if new_distance < self.success_distance:
+            reward += self.success_reward
             terminated = True
             termination_reason = "goal"
         else:
             terminated = False
 
         if wall_hit:
-            reward -= WALL_PENALTY
+            reward -= self.wall_penalty
             self.stuck_steps += 1
         else:
             self.stuck_steps = 0
 
         if opposite_action:
             self.flip_streak += 1
-            reward -= OSCILLATION_PENALTY
+            reward -= self.oscillation_penalty
         else:
             self.flip_streak = 0
 
         changed_axis = self.prev_action is not None and (action // 2) != (self.prev_action // 2)
-        if changed_axis and progress_delta <= PROGRESS_EPSILON:
-            reward -= TURN_PENALTY
+        if changed_axis and progress_delta <= self.progress_epsilon:
+            reward -= self.turn_penalty
 
-        if progress_delta <= PROGRESS_EPSILON:
+        if progress_delta <= self.progress_epsilon:
             self.no_progress_steps += 1
-            reward -= NO_PROGRESS_PENALTY
+            reward -= self.no_progress_penalty
         else:
             self.no_progress_steps = 0
 
-        if not terminated and self.stuck_steps >= STUCK_LIMIT:
+        if not terminated and self.stuck_steps >= self.stuck_limit:
             terminated = True
-            reward -= WALL_PENALTY
+            reward -= self.wall_penalty
             termination_reason = "stuck"
 
-        if not terminated and self.flip_streak >= FLIP_LIMIT:
+        if not terminated and self.flip_streak >= self.flip_limit:
             terminated = True
-            reward -= OSCILLATION_PENALTY
+            reward -= self.oscillation_penalty
             termination_reason = "oscillation"
 
-        if not terminated and self.no_progress_steps >= NO_PROGRESS_LIMIT:
+        if not terminated and self.no_progress_steps >= self.no_progress_limit:
             terminated = True
-            reward -= NO_PROGRESS_PENALTY
+            reward -= self.no_progress_penalty
             termination_reason = "no_progress"
 
-        truncated = self.steps >= MAX_EPISODE_STEPS
+        truncated = self.steps >= self.max_episode_steps
         if truncated:
             termination_reason = "time_limit"
 
