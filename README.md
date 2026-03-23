@@ -25,7 +25,7 @@ Train a model:
 python train_ppo_nav.py train --timesteps 5000 --run-name nav_run
 ```
 
-Run inference with a saved checkpoint:
+Run inference with a saved checkpoint (loops until you press `q`):
 
 ```bash
 python train_ppo_nav.py infer --checkpoint models/nav_run_final.zip

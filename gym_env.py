@@ -8,10 +8,12 @@ import pygame
 from gymnasium import register, spaces
 
 
+ENV_ID = "NavigationEnv-v0"
+
 register(
-    id="NavigationEnv-v0",
+    id=ENV_ID,
     entry_point="gym_env:NavigationEnv",
-    max_episode_steps=30,
+    max_episode_steps=300,
 )
 
 
@@ -29,12 +31,19 @@ class NavigationEnv(gym.Env):
         self.padding = 20
         self.success_distance = 10
         self.min_goal_distance = 100
-        self.max_episode_steps = 30
+        self.max_episode_steps = 300
         self.max_distance = math.sqrt(2 * (self.window_size ** 2))
-        self.step_penalty = 0.05
+        self.step_penalty = 1.0
+        self.closer_reward = 2.0
+        self.farther_penalty = 2.0
+        self.goal_reward = 100.0
+        self.wall_penalty = 5.0
+        self.truncation_penalty = 200.0
         self.progress_scale = 3.0
         self.success_reward = 100.0
-        self.wall_penalty = 1.5
+        self.fast_goal_step_limit = 20
+        self.fast_goal_bonus = 300.0
+        self.fast_goal_scale = 15.0
         self.turn_penalty = 0.4
         self.oscillation_penalty = 0.75
         self.no_progress_penalty = 0.25
@@ -57,6 +66,7 @@ class NavigationEnv(gym.Env):
 
         self.steps = 0
         self.start_time = 0.0
+        self.episode_reward = 0.0
 
         self.prev_action = None
         self.no_progress_steps = 0
@@ -124,6 +134,7 @@ class NavigationEnv(gym.Env):
 
         self.steps = 0
         self.start_time = time.time()
+        self.episode_reward = 0.0
         self.prev_action = None
         self.no_progress_steps = 0
         self.stuck_steps = 0
@@ -167,55 +178,48 @@ class NavigationEnv(gym.Env):
         wall_hit = not moved
         new_distance = self._distance_to_goal()
         progress_delta = old_distance - new_distance
-        reward = (self.progress_scale * progress_delta) - self.step_penalty
 
-        if new_distance < self.success_distance:
-            reward += self.success_reward
-            terminated = True
-            termination_reason = "goal"
-        else:
-            terminated = False
+        # Reward rules (only):
+        # -1 each step
+        # +2 if getting closer
+        # -2 if getting farther
+        # -5 if wall hit
+        # +100 if goal reached
+        reward = -self.step_penalty
+        if progress_delta > 0:
+            reward += self.closer_reward
+        elif progress_delta < 0:
+            reward -= self.farther_penalty
 
         if wall_hit:
             reward -= self.wall_penalty
-            self.stuck_steps += 1
-        else:
-            self.stuck_steps = 0
+
+        terminated = False
+        if new_distance < self.success_distance:
+            reward += self.goal_reward
+            terminated = True
+            termination_reason = "goal"
+
+        self.episode_reward += reward
+
+        truncated = self.steps >= self.max_episode_steps
+        if self.episode_reward <= -10.0:
+            truncated = True
+            termination_reason = "reward_floor"
+        if truncated:
+            reward -= self.truncation_penalty
+            if termination_reason == "running":
+                termination_reason = "time_limit"
 
         if opposite_action:
             self.flip_streak += 1
-            reward -= self.oscillation_penalty
         else:
             self.flip_streak = 0
 
-        changed_axis = self.prev_action is not None and (action // 2) != (self.prev_action // 2)
-        if changed_axis and progress_delta <= self.progress_epsilon:
-            reward -= self.turn_penalty
-
         if progress_delta <= self.progress_epsilon:
             self.no_progress_steps += 1
-            reward -= self.no_progress_penalty
         else:
             self.no_progress_steps = 0
-
-        if not terminated and self.stuck_steps >= self.stuck_limit:
-            terminated = True
-            reward -= self.wall_penalty
-            termination_reason = "stuck"
-
-        if not terminated and self.flip_streak >= self.flip_limit:
-            terminated = True
-            reward -= self.oscillation_penalty
-            termination_reason = "oscillation"
-
-        if not terminated and self.no_progress_steps >= self.no_progress_limit:
-            terminated = True
-            reward -= self.no_progress_penalty
-            termination_reason = "no_progress"
-
-        truncated = self.steps >= self.max_episode_steps
-        if truncated:
-            termination_reason = "time_limit"
 
         self.prev_action = action
 

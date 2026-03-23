@@ -1,9 +1,11 @@
 import gymnasium as gym
 import gym_env  # registers NavigationEnv-v0
 
+ENV_ID = "NavigationEnv-v0"
+
 
 def main():
-    env = gym.make(gym_env.ENV_ID)
+    env = gym.make(ENV_ID)
     obs, info = env.reset()
     print("reset:", obs, info)
 
