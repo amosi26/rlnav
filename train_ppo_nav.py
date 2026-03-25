@@ -20,7 +20,7 @@ TENSORBOARD_DIR = Path("runs")
 def make_env():
     return Monitor(
         gym.make(gym_env.ENV_ID),
-        info_keywords=("distance_to_goal", "termination_reason", "no_progress_steps", "flip_streak"),
+        info_keywords=("distance_to_goal", "termination_reason"),
     )
 
 
@@ -47,7 +47,7 @@ def train(total_timesteps=5000, run_name="debug_run", save_freq=1000, resume_che
             tensorboard_log=str(TENSORBOARD_DIR),
             n_steps=512,
             batch_size=128,
-            learning_rate=2e-4,
+            learning_rate=1e-4,
             gamma=0.995,
             gae_lambda=0.97,
             clip_range=0.2,
