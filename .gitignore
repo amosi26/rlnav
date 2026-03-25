@@ -5,3 +5,8 @@ runs/
 checkpoints/
 models/
 .pytest_cache/
+runs/
+checkpoints/
+ros2_nav/build/
+ros2_nav/install/
+ros2_nav/log/

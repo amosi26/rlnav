@@ -5,16 +5,21 @@ from pathlib import Path
 import time
 
 import gymnasium as gym
-import gym_env
 import pygame
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import CheckpointCallback
 from stable_baselines3.common.monitor import Monitor
 
-CHECKPOINT_DIR = Path("checkpoints")
-MODEL_DIR = Path("models")
-TENSORBOARD_DIR = Path("runs")
+try:
+    from nav_core import gym_env
+except ModuleNotFoundError:
+    import gym_env
+
+BASE_DIR = Path(__file__).resolve().parent
+CHECKPOINT_DIR = BASE_DIR / "checkpoints"
+MODEL_DIR = BASE_DIR / "models"
+TENSORBOARD_DIR = BASE_DIR / "runs"
 
 
 def make_env():

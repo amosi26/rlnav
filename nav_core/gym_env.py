@@ -12,7 +12,7 @@ ENV_ID = "NavigationEnv-v0"
 
 register(
     id=ENV_ID,
-    entry_point="gym_env:NavigationEnv",
+    entry_point=f"{__name__}:NavigationEnv",
     max_episode_steps=300,
 )
 
