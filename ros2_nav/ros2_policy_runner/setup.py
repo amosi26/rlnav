@@ -2,6 +2,9 @@ from setuptools import setup
 
 package_name = 'ros2_policy_runner'
 
+from glob import glob
+import os
+
 setup(
     name=package_name,
     version='0.0.0',
@@ -19,4 +22,7 @@ setup(
             'policy_runner_node = ros2_policy_runner.policy_node:main',
         ],
     },
+    data_files=[
+        (os.path.join('share', package_name, 'srv'), glob('srv/*.srv')),
+    ],
 )
