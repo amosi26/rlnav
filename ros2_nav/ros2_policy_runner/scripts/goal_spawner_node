@@ -1,0 +1,7 @@
+#!/usr/bin/env python3
+
+from ros2_policy_runner.goal_spawner import main
+
+
+if __name__ == "__main__":
+    main()

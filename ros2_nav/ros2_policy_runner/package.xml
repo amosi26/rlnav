@@ -3,13 +3,15 @@
   <name>ros2_policy_runner</name>
   <version>0.0.0</version>
   <description>Minimal ROS2 wrapper for PPO PolicyRunner</description>
-  <maintainer email="amosincat26@gmail.com">Andrei Mosincat</maintainer>
+  <maintainer email="maintainer@example.com">Maintainer</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>simulation_interfaces</depend>
 
   <depend>rosidl_default_generators</depend>
   <build_depend>ament_cmake_python</build_depend>

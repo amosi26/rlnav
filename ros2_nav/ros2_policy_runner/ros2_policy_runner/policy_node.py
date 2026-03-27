@@ -54,17 +54,19 @@ TIMER_PERIOD = 0.1
 GRID_MIN = 0.0
 GRID_MAX = 8.0
 
-# Convert discrete action to ROS Twist message for velocity commands
+# Convert discrete action to ROS Twist message for planar base motion
 def action_to_twist(action):
     twist = Twist()
+    # Mapping matches gym_env.py: 0=up, 1=down, 2=left, 3=right
+    # Pygame "down" increases y, so we map down -> +y
     if action == 0:
-        twist.linear.x = LINEAR_SPEED
+        twist.linear.y = -LINEAR_SPEED
     elif action == 1:
-        twist.linear.x = -LINEAR_SPEED
+        twist.linear.y = LINEAR_SPEED
     elif action == 2:
-        twist.angular.z = ANGULAR_SPEED
+        twist.linear.x = -LINEAR_SPEED
     elif action == 3:
-        twist.angular.z = -ANGULAR_SPEED
+        twist.linear.x = LINEAR_SPEED
     return twist
 
 # Main ROS2 node class that runs the navigation policy
@@ -92,18 +94,23 @@ class PolicyRunnerNode(Node):
         # Goal state
         self.goal_x = None
         self.goal_y = None
-        self.auto_randomize_goal = True
+        self.declare_parameter("auto_randomize_goal", True)
+        self.auto_randomize_goal = bool(self.get_parameter("auto_randomize_goal").value)
+        self.declare_parameter("obs_scale", 75.0)
+        self.obs_scale = float(self.get_parameter("obs_scale").value)
 
         # Load the trained PPO policy model
         model_path = MODEL_PATH.resolve()
         self.get_logger().info(f"Loading policy from: {model_path}")
         self.runner = PolicyRunner(str(model_path))
+        self.get_logger().info(f"Observation scale: {self.obs_scale}")
 
         # Timer to periodically run policy inference
         self.create_timer(TIMER_PERIOD, self.timer_callback)
 
         # Randomize robot start position (simulate by waiting for first odom)
-        self.randomize_robot_start = True
+        self.declare_parameter("randomize_robot_start", True)
+        self.randomize_robot_start = bool(self.get_parameter("randomize_robot_start").value)
         self.spawned_goal = False
 
     def odom_callback(self, msg):
@@ -138,6 +145,9 @@ class PolicyRunnerNode(Node):
         if self.robot_x is None or self.robot_y is None:
             return
 
+        if self.goal_x is None or self.goal_y is None:
+            return
+
         if self.auto_randomize_goal and not self.spawned_goal:
             self._set_random_goal("Auto-randomize")
 
@@ -153,10 +163,10 @@ class PolicyRunnerNode(Node):
                 self.spawned_goal = False
         else:
             action = self.runner.predict_action(
-                self.robot_x,
-                self.robot_y,
-                self.goal_x,
-                self.goal_y,
+                self.robot_x * self.obs_scale,
+                self.robot_y * self.obs_scale,
+                self.goal_x * self.obs_scale,
+                self.goal_y * self.obs_scale,
             )
             action_name = self.runner.action_name(action)
             cmd = action_to_twist(action)

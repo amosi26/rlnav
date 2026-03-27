@@ -1,6 +1,10 @@
 .venv/
 __pycache__/
 *.pyc
+*.log
+.DS_Store
+.vscode/
+.idea/
 runs/
 checkpoints/
 models/
@@ -10,3 +14,8 @@ checkpoints/
 ros2_nav/build/
 ros2_nav/install/
 ros2_nav/log/
+build/
+install/
+log/
+nav_core/models/
+hexa_description/

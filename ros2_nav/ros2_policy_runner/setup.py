@@ -20,6 +20,7 @@ setup(
     entry_points={
         'console_scripts': [
             'policy_runner_node = ros2_policy_runner.policy_node:main',
+            'gz_base_driver_node = ros2_policy_runner.gz_base_driver:main',
         ],
     },
     data_files=[

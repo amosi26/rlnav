@@ -1,0 +1,1061 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="hexapod_urdf">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-7.3782E-19 0.0127 -0.127"
+        rpy="0 0 0" />
+      <mass
+        value="0.6506" />
+      <inertia
+        ixx="0.0034275"
+        ixy="-1.1699E-20"
+        ixz="1.0693E-19"
+        iyy="0.004088"
+        iyz="-9.0412E-21"
+        izz="0.00074276" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="front_left_upper">
+    <inertial>
+      <origin
+        xyz="2.7756E-17 0.009525 0.015663"
+        rpy="0 0 0" />
+      <mass
+        value="0.022459" />
+      <inertia
+        ixx="8.4861E-06"
+        ixy="2.3389E-22"
+        ixz="5.7175E-21"
+        iyy="8.4796E-06"
+        iyz="1.5971E-22"
+        izz="1.4725E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_left_upper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_left_upper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist__front_left"
+    type="revolute">
+    <origin
+      xyz="-0.0381 0.22225 0.003175"
+      rpy="1.5708 0 -1.8923" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_left_upper" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.44"
+      upper="0.44"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="front_left_lower">
+    <inertial>
+      <origin
+        xyz="-1.3878E-16 6.9389E-18 0.033073"
+        rpy="0 0 0" />
+      <mass
+        value="0.027398" />
+      <inertia
+        ixx="1.0356E-05"
+        ixy="-1.4823E-21"
+        ixz="-1.0588E-21"
+        iyy="1.2036E-05"
+        iyz="-7.8086E-22"
+        izz="3.5379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_left_lower.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_left_lower.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knee__front_left"
+    type="revolute">
+    <origin
+      xyz="0 0.009525 0.033338"
+      rpy="0.34189 0 0" />
+    <parent
+      link="front_left_upper" />
+    <child
+      link="front_left_lower" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.61"
+      upper="0.61"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="front_left_foot">
+    <inertial>
+      <origin
+        xyz="0 5.5511E-17 0.033316"
+        rpy="0 0 0" />
+      <mass
+        value="0.039232" />
+      <inertia
+        ixx="1.4814E-05"
+        ixy="-2.5411E-21"
+        ixz="-3.7852E-21"
+        iyy="1.7341E-05"
+        iyz="7.8417E-21"
+        izz="4.9798E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_left_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_left_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle__front_left"
+    type="fixed">
+    <origin
+      xyz="0 0 0.057785"
+      rpy="0.98798 0 0" />
+    <parent
+      link="front_left_lower" />
+    <child
+      link="front_left_foot" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="middle_left_upper">
+    <inertial>
+      <origin
+        xyz="2.7756E-17 0.009525 -0.016087"
+        rpy="0 0 0" />
+      <mass
+        value="0.022459" />
+      <inertia
+        ixx="8.4861E-06"
+        ixy="1.5934E-23"
+        ixz="5.1351E-21"
+        iyy="8.4796E-06"
+        iyz="4.1047E-22"
+        izz="1.4725E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_left_upper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_left_upper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_middle_left"
+    type="revolute">
+    <origin
+      xyz="-0.047498 0.127 0.003175"
+      rpy="1.5708 0 2.0565" />
+    <parent
+      link="base_link" />
+    <child
+      link="middle_left_upper" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.44"
+      upper="0.44"
+      effort="10"
+      velocity="10" />
+  </joint>
+  <link
+    name="middle_left_lower">
+    <inertial>
+      <origin
+        xyz="2.7756E-17 -2.0817E-17 0.033073"
+        rpy="0 0 0" />
+      <mass
+        value="0.027398" />
+      <inertia
+        ixx="1.0356E-05"
+        ixy="6.3527E-22"
+        ixz="9.8468E-21"
+        iyy="1.2036E-05"
+        iyz="2.4087E-21"
+        izz="3.5379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_left_lower.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_left_lower.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knee_middle_left"
+    type="revolute">
+    <origin
+      xyz="0 0.009525 -0.033338"
+      rpy="-2.6571 0 -3.1416" />
+    <parent
+      link="middle_left_upper" />
+    <child
+      link="middle_left_lower" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.61"
+      upper="0.61"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="middle_left_foot">
+    <inertial>
+      <origin
+        xyz="-1.2768E-15 2.0817E-17 0.033316"
+        rpy="0 0 0" />
+      <mass
+        value="0.039232" />
+      <inertia
+        ixx="1.4814E-05"
+        ixy="-8.4703E-22"
+        ixz="2.5411E-21"
+        iyy="1.7341E-05"
+        iyz="-5.6645E-21"
+        izz="4.9798E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_left_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_left_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_middle_left"
+    type="fixed">
+    <origin
+      xyz="0 0 0.057785"
+      rpy="0.45144 0 0" />
+    <parent
+      link="middle_left_lower" />
+    <child
+      link="middle_left_foot" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="back_left_upper">
+    <inertial>
+      <origin
+        xyz="-2.7756E-17 0.009525 -0.016087"
+        rpy="0 0 0" />
+      <mass
+        value="0.022459" />
+      <inertia
+        ixx="8.4861E-06"
+        ixy="5.8677E-23"
+        ixz="-3.2293E-21"
+        iyy="8.4796E-06"
+        iyz="1.9306E-22"
+        izz="1.4725E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_left_upper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_left_upper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_back_left"
+    type="revolute">
+    <origin
+      xyz="-0.0381 0.03175 0.003175"
+      rpy="1.5708 0 1.8923" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_left_upper" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.44"
+      upper="0.44"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="back_left_lower">
+    <inertial>
+      <origin
+        xyz="2.0817E-16 2.7756E-17 0.033073"
+        rpy="0 0 0" />
+      <mass
+        value="0.027398" />
+      <inertia
+        ixx="1.0356E-05"
+        ixy="-1.1647E-21"
+        ixz="6.6704E-21"
+        iyy="1.2036E-05"
+        iyz="1.1468E-20"
+        izz="3.5379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_left_lower.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_left_lower.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knee_back_left"
+    type="revolute">
+    <origin
+      xyz="0 0.009525 -0.033338"
+      rpy="-2.7997 0 3.1416" />
+    <parent
+      link="back_left_upper" />
+    <child
+      link="back_left_lower" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.61"
+      upper="0.61"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="back_left_foot">
+    <inertial>
+      <origin
+        xyz="-6.9389E-17 0 0.033316"
+        rpy="0 0 0" />
+      <mass
+        value="0.039232" />
+      <inertia
+        ixx="1.4814E-05"
+        ixy="-4.2352E-22"
+        ixz="-2.4087E-21"
+        iyy="1.7341E-05"
+        iyz="1.571E-20"
+        izz="4.9798E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_left_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_left_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_back_left"
+    type="fixed">
+    <origin
+      xyz="0 0 0.057785"
+      rpy="0.98798 0 0" />
+    <parent
+      link="back_left_lower" />
+    <child
+      link="back_left_foot" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="front_right_upper">
+    <inertial>
+      <origin
+        xyz="-2.7756E-17 0.009525 -0.016087"
+        rpy="0 0 0" />
+      <mass
+        value="0.022459" />
+      <inertia
+        ixx="8.4861E-06"
+        ixy="-1.8303E-22"
+        ixz="-1.8794E-21"
+        iyy="8.4796E-06"
+        iyz="2.2201E-22"
+        izz="1.4725E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_right_upper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_right_upper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_front_right"
+    type="revolute">
+    <origin
+      xyz="0.0381 0.22225 0.003175"
+      rpy="1.5708 0 -1.2493" />
+    <parent
+      link="base_link" />
+    <child
+      link="front_right_upper" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.44"
+      upper="0.44"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="front_right_lower">
+    <inertial>
+      <origin
+        xyz="2.498E-16 7.6328E-17 0.033073"
+        rpy="0 0 0" />
+      <mass
+        value="0.027398" />
+      <inertia
+        ixx="1.0356E-05"
+        ixy="8.4703E-22"
+        ixz="1.0376E-20"
+        iyy="1.2036E-05"
+        iyz="3.4345E-21"
+        izz="3.5379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_right_lower.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_right_lower.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knee_front_right"
+    type="revolute">
+    <origin
+      xyz="0 0.009525 -0.033338"
+      rpy="-2.7997 0 3.1416" />
+    <parent
+      link="front_right_upper" />
+    <child
+      link="front_right_lower" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.61"
+      upper="0.61"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="front_right_foot">
+    <inertial>
+      <origin
+        xyz="2.7756E-17 5.5511E-17 0.033316"
+        rpy="0 0 0" />
+      <mass
+        value="0.039232" />
+      <inertia
+        ixx="1.4814E-05"
+        ixy="-4.6587E-21"
+        ixz="-2.7264E-21"
+        iyy="1.7341E-05"
+        iyz="-1.4757E-21"
+        izz="4.9798E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_right_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/front_right_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_front_right"
+    type="fixed">
+    <origin
+      xyz="0 0 0.057785"
+      rpy="0.98798 0 0" />
+    <parent
+      link="front_right_lower" />
+    <child
+      link="front_right_foot" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="middle_right_upper">
+    <inertial>
+      <origin
+        xyz="0 0.009525 0.015663"
+        rpy="0 0 0" />
+      <mass
+        value="0.022459" />
+      <inertia
+        ixx="8.4861E-06"
+        ixy="4.5977E-23"
+        ixz="-1.6411E-21"
+        iyy="8.4796E-06"
+        iyz="8.0777E-23"
+        izz="1.4725E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_right_upper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_right_upper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_middle_right"
+    type="revolute">
+    <origin
+      xyz="0.047498 0.127 0.003175"
+      rpy="1.5708 0 1.0851" />
+    <parent
+      link="base_link" />
+    <child
+      link="middle_right_upper" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.44"
+      upper="0.44"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="middle_right_lower">
+    <inertial>
+      <origin
+        xyz="0 1.0408E-17 0.033073"
+        rpy="0 0 0" />
+      <mass
+        value="0.027398" />
+      <inertia
+        ixx="1.0356E-05"
+        ixy="-1.0588E-21"
+        ixz="4.7646E-21"
+        iyy="1.2036E-05"
+        iyz="-6.8557E-21"
+        izz="3.5379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_right_lower.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_right_lower.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knee_right_middle"
+    type="revolute">
+    <origin
+      xyz="0 0.009525 0.033338"
+      rpy="0.48448 0 0" />
+    <parent
+      link="middle_right_upper" />
+    <child
+      link="middle_right_lower" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.61"
+      upper="0.61"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="middle_right_foot">
+    <inertial>
+      <origin
+        xyz="1.2768E-15 1.3878E-17 0.033316"
+        rpy="0 0 0" />
+      <mass
+        value="0.039232" />
+      <inertia
+        ixx="1.4814E-05"
+        ixy="-8.4703E-22"
+        ixz="1.9058E-21"
+        iyy="1.7341E-05"
+        iyz="-2.0646E-21"
+        izz="4.9798E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_right_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/middle_right_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_middle_right"
+    type="fixed">
+    <origin
+      xyz="0 0 0.057785"
+      rpy="0.45144 0 0" />
+    <parent
+      link="middle_right_lower" />
+    <child
+      link="middle_right_foot" />
+    <axis
+      xyz="1 0 0" />
+  </joint>
+  <link
+    name="back_right_upper">
+    <inertial>
+      <origin
+        xyz="-1.3878E-17 0.009525 0.015663"
+        rpy="0 0 0" />
+      <mass
+        value="0.022459" />
+      <inertia
+        ixx="8.4861E-06"
+        ixy="4.6799E-23"
+        ixz="3.5999E-21"
+        iyy="8.4796E-06"
+        iyz="3.045E-22"
+        izz="1.4725E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_right_upper.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_right_upper.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="waist_back_right"
+    type="revolute">
+    <origin
+      xyz="0.0381 0.03175 0.003175"
+      rpy="1.5708 0 1.2493" />
+    <parent
+      link="base_link" />
+    <child
+      link="back_right_upper" />
+    <axis
+      xyz="0 1 0" />
+    <limit
+      lower="-0.44"
+      upper="0.44"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="back_right_lower">
+    <inertial>
+      <origin
+        xyz="-1.9429E-16 4.1633E-17 0.033073"
+        rpy="0 0 0" />
+      <mass
+        value="0.027398" />
+      <inertia
+        ixx="1.0356E-05"
+        ixy="-1.0588E-22"
+        ixz="6.988E-21"
+        iyy="1.2036E-05"
+        iyz="9.8004E-21"
+        izz="3.5379E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_right_lower.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_right_lower.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="knee_back_right"
+    type="revolute">
+    <origin
+      xyz="0 0.009525 0.033338"
+      rpy="0.34189 0 0" />
+    <parent
+      link="back_right_upper" />
+    <child
+      link="back_right_lower" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.61"
+      upper="0.61"
+      effort="10"
+      velocity="1" />
+  </joint>
+  <link
+    name="back_right_foot">
+    <inertial>
+      <origin
+        xyz="0 2.7756E-17 0.033316"
+        rpy="0 0 0" />
+      <mass
+        value="0.039232" />
+      <inertia
+        ixx="1.4814E-05"
+        ixy="-3.8116E-21"
+        ixz="5.5851E-21"
+        iyy="1.7341E-05"
+        iyz="1.524E-20"
+        izz="4.9798E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_right_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.69804 0.69804 0.69804 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://hexapod_andrei_urdf.SLDASM/meshes/back_right_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="ankle_back_right"
+    type="fixed">
+    <origin
+      xyz="0 0 0.057785"
+      rpy="0.98798 0 0" />
+    <parent
+      link="back_right_lower" />
+    <child
+      link="back_right_foot" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
